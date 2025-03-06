@@ -54,15 +54,17 @@ def sol(y0, t, args):
 t = (0.,0.0015)
 
 # Create the figure and the line that we will manipulate
-fig, ax = plt.subplots(2, sharex = True)
+fig, ax = plt.subplots(3, sharex = True)
 
 ax[-1].set(xlim = t, xlabel = 'Time [s]')
-ax[0].set(ylim = (0,0.005))
-ax[1].set(ylim = (100,1e6), yscale = 'log')
+ax[0].set(ylim = (-5000,5000))
+ax[1].set(ylim = (0,0.005))
+ax[2].set(ylim = (100,1e6), yscale = 'log')
 
 s = sol(y0, t, args = [[A,w,d]])
-lineR, = ax[0].plot(s.t, s.y[1], lw=2)
-lineT, = ax[1].plot(s.t, s.y[2], lw=2)
+lineV, = ax[0].plot(s.t, s.y[0], lw=2)
+lineR, = ax[1].plot(s.t, s.y[1], lw=2)
+lineT, = ax[2].plot(s.t, s.y[2], lw=2)
 
 
 # adjust the main plot to make room for the sliders
@@ -93,7 +95,8 @@ amp_slider = Slider(
 # The function to be called anytime a slider's value changes
 def update(val):
     s = sol(y0, t, args = [[amp_slider.val,freq_slider.val,d]])
-
+    lineV.set_xdata(s.t)
+    lineV.set_ydata(s.y[0])
     lineR.set_xdata(s.t)
     lineR.set_ydata(s.y[1])
     lineT.set_xdata(s.t)
